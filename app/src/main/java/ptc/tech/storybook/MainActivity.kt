@@ -3,36 +3,38 @@ package ptc.tech.storybook
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.material.TopAppBar
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import ptc.tech.storybook.stories.ButtonStory
 import ptc.tech.storybook.ui.theme.StorybookTheme
 
 class MainActivity : ComponentActivity() {
+    private val stories = listOf(
+        Story(title = "Button View", "button")
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             StorybookTheme {
+                val navController = rememberNavController()
                 // A surface container using the 'background' color from the theme
-                Surface(color = MaterialTheme.colors.background) {
-                    Greeting("Android")
+                Scaffold(topBar = { TopAppBar(title = { Text("Storybook")}) }) {
+                    NavHost(navController, startDestination = "storybook") {
+                        composable(route = "storybook") {
+                            StorybookView(stories = stories, navController = navController)
+                        }
+                        composable(route = "button") {
+                            ButtonStory()
+                        }
+                    }
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    StorybookTheme {
-        Greeting("Android")
     }
 }
