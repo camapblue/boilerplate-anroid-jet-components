@@ -14,7 +14,9 @@ import ptc.tech.storybook.ui.theme.StorybookTheme
 
 class MainActivity : ComponentActivity() {
     private val stories = listOf(
-        Story(title = "Button View", "button")
+        Story(title = "Button View") {
+            ButtonStory()
+        }
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,10 +29,7 @@ class MainActivity : ComponentActivity() {
                 Scaffold(topBar = { TopAppBar(title = { Text("Storybook")}) }) {
                     NavHost(navController, startDestination = "storybook") {
                         composable(route = "storybook") {
-                            StorybookView(stories = stories, navController = navController)
-                        }
-                        composable(route = "button") {
-                            ButtonStory()
+                            StorybookView(stories = stories)
                         }
                     }
                 }

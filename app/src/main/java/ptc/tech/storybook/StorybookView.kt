@@ -7,17 +7,15 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.navigation.NavHostController
 
 @Composable
 fun StorybookView(
-    stories: List<Story>,
-    navController: NavHostController
+    stories: List<Story>
 ) {
     Surface(Modifier.background(color = Color.White)) {
         LazyColumn {
             items(stories) { story ->
-                StoryRowItem(story = story, navController = navController)
+                StoryRowItem(story = story)
             }
         }
     }
