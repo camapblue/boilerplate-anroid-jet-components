@@ -26,7 +26,7 @@ class MainActivity : ComponentActivity() {
             StorybookTheme {
                 val navController = rememberNavController()
                 // A surface container using the 'background' color from the theme
-                Scaffold(topBar = { TopAppBar(title = { Text("Storybook")}) }) {
+                Scaffold(topBar = { TopAppBar(title = { Text("Storybook") }) }) {
                     NavHost(navController, startDestination = "storybook") {
                         composable(route = "storybook") {
                             StorybookView(stories = stories)
