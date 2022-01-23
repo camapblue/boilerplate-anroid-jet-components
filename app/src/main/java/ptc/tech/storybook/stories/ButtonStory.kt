@@ -12,12 +12,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ptc.tech.jet_components.Button
 
 @Composable
 fun ButtonStory() {
-    Surface(Modifier.background(color = Color.White)) {
+    Button(
+        "Button",
+        backgroundColor = Color.Cyan,
+        highlightColor = Color.Red,
+        textColor = Color.Black
+    )
+    /*Surface(Modifier.background(color = Color.White)) {
         Column(modifier = Modifier.padding(8.dp)) {
             Text("Here is Button Story", color = Color.Black, fontSize = 15.sp)
         }
-    }
+    }*/
 }
