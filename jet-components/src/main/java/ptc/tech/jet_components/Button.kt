@@ -109,7 +109,6 @@ fun PrimaryButton(onClickListener: () -> Unit = {}) {
     }
 }
 
-@Preview()
 @Composable
 fun PaddingButton(onClickListener: () -> Unit = {}) {
     MdcTheme {
@@ -124,7 +123,6 @@ fun PaddingButton(onClickListener: () -> Unit = {}) {
     }
 }
 
-@Preview()
 @Composable
 fun SecondaryButton(onClickListener: () -> Unit = {}) {
     MdcTheme {
@@ -141,7 +139,6 @@ fun SecondaryButton(onClickListener: () -> Unit = {}) {
     }
 }
 
-@Preview()
 @Composable
 fun SecondaryPaddingButton(onClickListener: () -> Unit = {}) {
     MdcTheme {
