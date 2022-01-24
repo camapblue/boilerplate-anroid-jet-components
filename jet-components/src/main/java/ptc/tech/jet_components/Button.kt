@@ -14,9 +14,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.android.material.composethemeadapter.MdcTheme
+import ptc.tech.jet_components.theme.Colors
 
 @Composable
 fun Button(
@@ -88,4 +91,68 @@ private fun getModifier(
     }
 
     return Modifier.size(Dp.Unspecified)
+}
+
+@Preview()
+@Composable
+fun PrimaryButton(onClickListener: () -> Unit = {}) {
+    MdcTheme {
+        Button(
+            title = "Primary Button",
+            backgroundColor = Colors.PrimaryColor,
+            highlightColor = Colors.SecondaryColor,
+            textColor = Color.Black,
+            cornerRadiusInDp = 8f,
+            widthInDp = -1f,
+            onClickListener = onClickListener
+        )
+    }
+}
+
+@Preview()
+@Composable
+fun PaddingButton(onClickListener: () -> Unit = {}) {
+    MdcTheme {
+        Button(
+            title = "Padding Button",
+            backgroundColor = Colors.PrimaryColor,
+            highlightColor = Colors.SecondaryColor,
+            textColor = Color.Black,
+            cornerRadiusInDp = 8f,
+            onClickListener = onClickListener
+        )
+    }
+}
+
+@Preview()
+@Composable
+fun SecondaryButton(onClickListener: () -> Unit = {}) {
+    MdcTheme {
+        Button(
+            title = "Secondary Button",
+            backgroundColor = Color.White,
+            highlightColor = Colors.SecondaryColor,
+            textColor = Color.Black,
+            cornerRadiusInDp = 8f,
+            borderColor = Color.Gray,
+            widthInDp = -1f,
+            onClickListener = onClickListener
+        )
+    }
+}
+
+@Preview()
+@Composable
+fun SecondaryPaddingButton(onClickListener: () -> Unit = {}) {
+    MdcTheme {
+        Button(
+            title = "Secondary Padding Button",
+            backgroundColor = Color.White,
+            highlightColor = Colors.SecondaryColor,
+            textColor = Color.Black,
+            cornerRadiusInDp = 8f,
+            borderColor = Color.Gray,
+            onClickListener = onClickListener
+        )
+    }
 }
