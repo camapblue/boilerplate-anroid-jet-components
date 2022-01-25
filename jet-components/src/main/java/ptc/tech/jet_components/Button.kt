@@ -14,8 +14,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.android.material.composethemeadapter.MdcTheme
@@ -27,10 +25,12 @@ fun Button(
     backgroundColor: Color,
     highlightColor: Color,
     disabledColor: Color = Color.Gray,
-    textSizeInSp: Float = 14f,
+    textSizeInSp: Float = 16f,
     textColor: Color,
+    disableTextColor: Color = textColor,
     cornerRadiusInDp: Float = 0f,
     borderColor: Color? = null,
+    disableBorderColor: Color? = borderColor,
     widthInDp: Float? = null,
     heightInDp: Float? = null,
     paddingInDp: Float? = null,
@@ -40,6 +40,7 @@ fun Button(
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
     val emptyFunc = {}
+
     val backgroundByState = if (!isEnable) {
         disabledColor
     } else if (isPressed) {
@@ -48,23 +49,34 @@ fun Button(
         backgroundColor
     }
 
+    val textColorByState = if (isEnable) {
+        textColor
+    } else {
+        disableTextColor
+    }
+
     androidx.compose.material.Button(
         interactionSource = interactionSource,
         onClick = if (isEnable) onClickListener else emptyFunc,
         colors = ButtonDefaults.buttonColors(
             backgroundColor = backgroundByState,
-            contentColor = textColor
+            contentColor = textColorByState
         ),
         shape = RoundedCornerShape(corner = CornerSize(cornerRadiusInDp.dp)),
         border = BorderStroke(
-            width = if (borderColor != null) 1.dp else 0.dp,
-            color = borderColor ?: Color.Transparent
+            width = if (borderColor != null) 2.dp else 0.dp,
+            color = if (isEnable) {
+                borderColor ?: Color.Transparent
+            } else {
+                disableBorderColor ?: Color.Transparent
+            }
         ),
         contentPadding = if (paddingInDp != null) PaddingValues(paddingInDp.dp) else ButtonDefaults.ContentPadding,
         enabled = isEnable,
-        modifier = getModifier(widthInDp, heightInDp)
+        modifier = getModifier(widthInDp, heightInDp),
+        elevation = ButtonDefaults.elevation(0.dp, 0.dp)
     ) {
-        Text(title, color = textColor, fontSize = textSizeInSp.sp, fontWeight = FontWeight.Bold)
+        Text(title, color = textColorByState, fontSize = textSizeInSp.sp, fontWeight = FontWeight.Bold)
     }
 }
 
@@ -72,83 +84,178 @@ private fun getModifier(
     widthInDp: Float? = null,
     heightInDp: Float? = null
 ): Modifier {
-    if (widthInDp != null && heightInDp != null) {
-        return Modifier.size(widthInDp.dp, heightInDp.dp)
-    }
+    var modifier: Modifier = Modifier
 
     if (widthInDp != null) {
-        if (widthInDp < 0) {
-            return Modifier.fillMaxWidth()
+        modifier = if (widthInDp < 0) {
+            modifier.fillMaxWidth()
+        } else {
+            Modifier.width(widthInDp.dp)
         }
-        return Modifier.width(widthInDp.dp)
     }
 
     if (heightInDp != null) {
-        if (heightInDp < 0) {
-            return Modifier.fillMaxHeight()
+        modifier = if (heightInDp < 0) {
+            modifier.fillMaxHeight()
+        } else {
+            modifier.height(heightInDp.dp)
         }
-        return Modifier.height(heightInDp.dp)
     }
 
-    return Modifier.size(Dp.Unspecified)
+    return modifier
 }
 
-@Preview()
 @Composable
-fun PrimaryButton(onClickListener: () -> Unit = {}) {
+fun PrimaryButton(
+    title: String = "Primary Button",
+    onClickListener: () -> Unit = {},
+) {
     MdcTheme {
         Button(
-            title = "Primary Button",
-            backgroundColor = Colors.PrimaryColor,
-            highlightColor = Colors.SecondaryColor,
-            textColor = Color.Black,
-            cornerRadiusInDp = 8f,
+            title = title,
+            backgroundColor = Colors.Button.PrimaryBackgroundColor,
+            highlightColor = Colors.Button.HighlightPrimaryBackgroundColor,
+            disabledColor = Colors.Button.DisableBackgroundColor,
+            textColor = Colors.Button.TextColorBlack,
+            disableTextColor = Colors.Button.TextColorGray,
+            cornerRadiusInDp = 4f,
             widthInDp = -1f,
+            heightInDp = 44f,
             onClickListener = onClickListener
         )
     }
 }
 
 @Composable
-fun PaddingButton(onClickListener: () -> Unit = {}) {
+fun PrimaryDisableButton(
+    title: String = "Primary Disable Button",
+    onClickListener: () -> Unit = {}
+) {
     MdcTheme {
         Button(
-            title = "Padding Button",
-            backgroundColor = Colors.PrimaryColor,
-            highlightColor = Colors.SecondaryColor,
-            textColor = Color.Black,
-            cornerRadiusInDp = 8f,
-            onClickListener = onClickListener
-        )
-    }
-}
-
-@Composable
-fun SecondaryButton(onClickListener: () -> Unit = {}) {
-    MdcTheme {
-        Button(
-            title = "Secondary Button",
-            backgroundColor = Color.White,
-            highlightColor = Colors.SecondaryColor,
-            textColor = Color.Black,
-            cornerRadiusInDp = 8f,
-            borderColor = Color.Gray,
+            title = title,
+            backgroundColor = Colors.Button.PrimaryBackgroundColor,
+            highlightColor = Colors.Button.HighlightPrimaryBackgroundColor,
+            disabledColor = Colors.Button.DisableBackgroundColor,
+            textColor = Colors.Button.TextColorBlack,
+            disableTextColor = Colors.Button.TextColorGray,
+            isEnable = false,
+            cornerRadiusInDp = 4f,
             widthInDp = -1f,
+            heightInDp = 44f,
             onClickListener = onClickListener
         )
     }
 }
 
 @Composable
-fun SecondaryPaddingButton(onClickListener: () -> Unit = {}) {
+fun SecondaryButton(
+    title: String = "Secondary Button",
+    onClickListener: () -> Unit = {}
+) {
     MdcTheme {
         Button(
-            title = "Secondary Padding Button",
+            title = title,
+            backgroundColor = Colors.Button.SecondaryBackgroundColor,
+            highlightColor = Colors.Button.HighlightSecondaryBackgroundColor,
+            disabledColor = Colors.Button.DisableBackgroundColor,
+            textColor = Colors.Button.TextColorWhite,
+            disableTextColor = Colors.Button.TextColorGray,
+            cornerRadiusInDp = 4f,
+            widthInDp = -1f,
+            heightInDp = 44f,
+            onClickListener = onClickListener
+        )
+    }
+}
+
+@Composable
+fun PrimaryBorderButton(
+    title: String = "Primary Border Button",
+    onClickListener: () -> Unit = {}
+) {
+    MdcTheme {
+        Button(
+            title = title,
             backgroundColor = Color.White,
-            highlightColor = Colors.SecondaryColor,
-            textColor = Color.Black,
-            cornerRadiusInDp = 8f,
-            borderColor = Color.Gray,
+            highlightColor = Colors.Button.HighlightPrimaryBorderBackgroundColor,
+            disabledColor = Colors.Button.DisableBackgroundColor,
+            textColor = Colors.Button.TextColorBlack,
+            disableTextColor = Colors.Button.TextColorGray,
+            cornerRadiusInDp = 4f,
+            widthInDp = -1f,
+            heightInDp = 44f,
+            borderColor = Color.Black,
+            onClickListener = onClickListener
+        )
+    }
+}
+
+@Composable
+fun DisablePrimaryBorderButton(
+    title: String = "Primary Border Button",
+    onClickListener: () -> Unit = {}
+) {
+    MdcTheme {
+        Button(
+            title = title,
+            backgroundColor = Color.White,
+            highlightColor = Colors.Button.HighlightPrimaryBorderBackgroundColor,
+            disabledColor = Colors.Button.DisableBackgroundColor,
+            textColor = Colors.Button.TextColorBlack,
+            disableTextColor = Colors.Button.TextColorGray,
+            isEnable = false,
+            cornerRadiusInDp = 4f,
+            widthInDp = -1f,
+            heightInDp = 44f,
+            borderColor = Color.Black,
+            onClickListener = onClickListener
+        )
+    }
+}
+
+@Composable
+fun SecondaryBorderButton(
+    title: String = "Secondary Border Button",
+    onClickListener: () -> Unit = {}
+) {
+    MdcTheme {
+        Button(
+            title = title,
+            backgroundColor = Color.White,
+            highlightColor = Colors.Button.HighlightSecondaryBorderBackgroundColor,
+            disabledColor = Colors.Button.DisableBackgroundColor,
+            textColor = Colors.Button.TextColorBlue,
+            disableTextColor = Colors.Button.TextColorGray,
+            disableBorderColor = Colors.Button.DisableSecondaryBorderColor,
+            cornerRadiusInDp = 4f,
+            widthInDp = -1f,
+            heightInDp = 44f,
+            borderColor = Colors.Button.SecondaryBorderColor,
+            onClickListener = onClickListener
+        )
+    }
+}
+
+@Composable
+fun DisableSecondaryBorderButton(
+    title: String = "Disable Secondary Border Button",
+    onClickListener: () -> Unit = {}
+) {
+    MdcTheme {
+        Button(
+            title = title,
+            backgroundColor = Color.White,
+            highlightColor = Colors.Button.HighlightSecondaryBorderBackgroundColor,
+            disabledColor = Colors.Button.DisableBackgroundColor,
+            textColor = Colors.Button.TextColorBlue,
+            disableTextColor = Colors.Button.TextColorGray,
+            disableBorderColor = Colors.Button.DisableSecondaryBorderColor,
+            isEnable = false,
+            cornerRadiusInDp = 4f,
+            widthInDp = -1f,
+            heightInDp = 44f,
+            borderColor = Colors.Button.HighlightSecondaryBorderBackgroundColor,
             onClickListener = onClickListener
         )
     }

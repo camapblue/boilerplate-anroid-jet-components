@@ -65,4 +65,5 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
 
     implementation project(':jet-components')
+//    implementation 'com.github.hoangdinhhiep:mycompose:0.0.5'
 }
