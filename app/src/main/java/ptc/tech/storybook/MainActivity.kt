@@ -11,6 +11,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import ptc.tech.storybook.stories.AvatarStory
 import ptc.tech.storybook.stories.ButtonStory
+import ptc.tech.storybook.stories.TextFieldStory
 import ptc.tech.storybook.ui.theme.StorybookTheme
 
 class MainActivity : ComponentActivity() {
@@ -20,6 +21,9 @@ class MainActivity : ComponentActivity() {
         },
         Story(title = "Image View") {
             AvatarStory()
+        },
+        Story(title = "TextField View") {
+            TextFieldStory()
         }
     )
 

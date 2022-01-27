@@ -31,4 +31,15 @@ class Colors {
             val TextColorBlue = Color(0xFF355AD8)
         }
     }
+
+    class TextField {
+        companion object {
+            val textColor = Color(0xFF000000)
+            val disableTextColor = Color(0xFF45484A)
+            val borderColor = Color(0xFF9D9EA3)
+            val focusBorderColor = Color(0xFF355AD8)
+            val errorColor = Color(0xFFCD2026)
+            val disableBackgroundColor = Color(0xFFF3F4F8)
+        }
+    }
 }
