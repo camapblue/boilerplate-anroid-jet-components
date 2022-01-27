@@ -3,23 +3,24 @@ package ptc.tech.jet_components
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -41,12 +42,11 @@ private fun TextFieldComponent(
     errorMessage: String? = null,
     errorColor: Color = Colors.TextField.errorColor,
     disableBackgroundColor: Color = Colors.TextField.disableBackgroundColor,
-    isPasswordInput: Boolean = false,
     widthInDp: Float? = null,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
     trailing: @Composable (() -> Unit)? = null
 ) {
     val inputValue = remember { mutableStateOf(if (text == null) TextFieldValue() else TextFieldValue(text)) }
-    val passwordVisibility = remember { mutableStateOf(false) }
     val interactionSource = remember { MutableInteractionSource() }
     val isFocusedState by interactionSource.collectIsFocusedAsState()
 
@@ -95,17 +95,7 @@ private fun TextFieldComponent(
             shape = RoundedCornerShape(4.dp),
             singleLine = true,
             maxLines = 1,
-            trailingIcon = if (isPasswordInput) {
-                {
-                    IconButton(onClick = {
-                        passwordVisibility.value = !passwordVisibility.value
-                    }) {
-                        Icon(imageVector = Icons.Default.Edit, contentDescription = null)
-                    }
-                }
-            } else {
-                trailing
-            },
+            trailingIcon = trailing,
             isError = isError,
             colors = TextFieldDefaults.textFieldColors(
                 unfocusedIndicatorColor = Color.Transparent,
@@ -115,11 +105,7 @@ private fun TextFieldComponent(
                 backgroundColor = Color.Transparent,
             ),
             enabled = isEnable,
-            visualTransformation = if (!isPasswordInput || passwordVisibility.value) {
-                VisualTransformation.None
-            } else {
-                PasswordVisualTransformation()
-            },
+            visualTransformation = visualTransformation,
             modifier = Modifier
                 .then(
                     if (widthInDp != null) {
@@ -182,6 +168,42 @@ fun CameraText(
         widthInDp = -1f,
         trailing = {
             Icon(painterResource(R.drawable.ic_camera), contentDescription = "camera")
+        }
+    )
+}
+
+@Composable
+fun PasswordText(
+    text: String? = null,
+    isEnable: Boolean = true,
+    isError: Boolean = false,
+    errorMessage: String? = null
+) {
+    val passwordVisibility = remember { mutableStateOf(false) }
+
+    TextFieldComponent(
+        label = "Password",
+        text = text,
+        hint = "Enter password",
+        isEnable = isEnable,
+        isError = isError,
+        errorMessage = errorMessage,
+        widthInDp = -1f,
+        trailing = {
+            Row(modifier = Modifier
+                .fillMaxHeight()
+                .clickable {
+                    passwordVisibility.value = !passwordVisibility.value
+                },
+                verticalAlignment = Alignment.CenterVertically) {
+                Icon(imageVector = Icons.Default.Edit, contentDescription = null)
+                Text(text = "Show", color = Color(0xFF808285), fontSize = 12.sp, modifier = Modifier.padding(start = 8.dp, end = 16.dp))
+            }
+        },
+        visualTransformation = if (passwordVisibility.value) {
+            VisualTransformation.None
+        } else {
+            PasswordVisualTransformation()
         }
     )
 }

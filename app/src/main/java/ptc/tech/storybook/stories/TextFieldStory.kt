@@ -91,5 +91,10 @@ fun TextFieldStory() {
                 isEnable = false
             )
         }
+        item {
+            PasswordText(
+                text = null
+            )
+        }
     }
 }
