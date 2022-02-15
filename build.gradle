@@ -17,7 +17,7 @@ buildscript {
 }
 
 allprojects {
-    group = 'ptc.tech.ui'
+    group = 'ptc.tech.uilibrary'
     version = '0.0.2'
 
     repositories {
